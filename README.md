@@ -1,56 +1,76 @@
-# Welcome to your Expo app 👋
+# ForkLine
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+ForkLine is a food ordering mobile app built with **Expo SDK 55** and **React Native**. Customers can browse restaurants, search menus, manage a cart, place orders (cash on delivery), and track order status.
 
-## Get started
+## Tech stack
 
-1. Install dependencies
+- Expo ~55, React Native 0.83, React 19
+- React Navigation 7 (native stack + bottom tabs)
+- NativeWind v4 + Tailwind CSS 3
+- Expo Google Fonts (Inter)
+- Expo Haptics, Linear Gradient, Image
 
-   ```bash
-   npm install
-   ```
+## Architecture
 
-2. Start the app
+| Pattern | Where | Why |
+|--------|--------|-----|
+| **Brand** | `src/components/brand/Logo` | SVG logo from `assets/svgs/logo.svg` |
+| **Primitive UI (shadcn-style)** | `src/components/ui/*` | Reusable `Button`, `Card`, `Input`, etc. with `cn()` and variant maps |
+| **Compound components** | `Card`, `BottomSheet`, `MenuItemCard`, `OrderProgressTracker` | Flexible composition for domain UI |
+| **Container / Presentational** | `src/screens/*/*Screen.tsx` + `*View.tsx` | Logic and navigation in containers; pure render in views |
+| **Context + hooks** | `CartContext`, `OrdersContext`, `useCart`, `useSearch` | Shared cart/order state with a clean hook API |
+| **HOC** | `withSkeleton` | Consistent loading placeholders for lists |
 
-   ```bash
-   npx expo start
-   ```
+## Project structure
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+App.tsx                 # Entry: fonts, providers, RootNavigator
+global.css              # Tailwind directives (NativeWind)
+src/
+  components/ui/        # Design system primitives
+  components/composite/ # RestaurantCard, MenuItemCard, etc.
+  components/layout/    # Screen, Section, Divider
+  context/              # Cart & orders state
+  data/mockData.ts      # 6 restaurants, full menus (PKR)
+  hooks/
+  lib/                  # cn, format, withSkeleton
+  navigation/           # Root stack + custom tab bar
+  screens/              # 6 feature screens (container + view)
+  types/
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Features (MVP)
 
-### Other setup steps
+- **Home** — categories, featured carousel, restaurant list, pull-to-refresh
+- **Search** — debounced query, popular/recent terms, category filters
+- **Restaurant** — menu by category, add to cart, floating cart bar
+- **Cart** — swipe to delete, quantity steppers, GST summary, place order sheet
+- **Orders** — active/past tabs, progress tracker, reorder
+- **Profile** — mock user, settings rows, logout
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Setup
 
-## Learn more
+```bash
+npm install
+npx expo start
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+`postinstall` applies `patches/react-native-css-interop+0.2.4.patch`, which fixes a Metro 0.83 crash on hot reload (NativeWind + Expo SDK 55).
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Typecheck:
 
-## Join the community
+```bash
+npm run typecheck
+```
 
-Join our community of developers creating universal apps.
+## Configuration
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **NativeWind**: `babel.config.js`, `metro.config.js`, `tailwind.config.js`, `global.css`
+- **Path alias**: `@/*` → `src/*` in `tsconfig.json`
+
+## Notes
+
+- Brand colors: primary `oklch(0.508 0.118 165.612)` / `#007A55`, background mist `oklch(0.963 0.002 197.1)` / `#F1F3F3`.
+- All prices use **PKR** formatting (`en-PK` locale).
+- Data is **mock-only**; no backend required for this MVP.
+- Payments, GPS tracking, reviews, and promos are out of scope.
