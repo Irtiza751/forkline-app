@@ -1,7 +1,7 @@
 /** Design tokens — OKLCH sources noted for reference */
 export const colors = {
   /** oklch(0.508 0.118 165.612) */
-  brand: '#007A55',
+  brand: '#000',
   brandDark: '#006844',
   brandLight: '#D3F5E5',
   brandSubtle: '#EBF9F2',
