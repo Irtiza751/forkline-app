@@ -18,14 +18,21 @@ export interface ProfileSettingRow {
 export interface ProfileScreenViewProps {
   name: string;
   email: string;
+  photoUrl?: string;
   settings: ProfileSettingRow[];
   onLogout: () => void;
 }
 
-export const ProfileScreenView = ({ name, email, settings, onLogout }: ProfileScreenViewProps) => (
-  <Screen className="bg-surface-alt" scrollable>
+export const ProfileScreenView = ({
+  name,
+  email,
+  photoUrl,
+  settings,
+  onLogout,
+}: ProfileScreenViewProps) => (
+  <Screen className="bg-mist" scrollable>
     <View className="items-center border-b border-border bg-surface px-4 py-8">
-      <Avatar name={name} size="lg" />
+      <Avatar name={name} imageUrl={photoUrl} size="lg" />
       <Typography variant="h2" className="mt-4">
         {name}
       </Typography>

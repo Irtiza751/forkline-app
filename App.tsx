@@ -6,6 +6,7 @@ import React, { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { AuthProvider } from '@/context/AuthContext';
 import { CartProvider } from '@/context/CartContext';
 import { OrdersProvider } from '@/context/OrdersContext';
 import { RootNavigator } from '@/navigation/RootNavigator';
@@ -34,12 +35,14 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <CartProvider>
-          <OrdersProvider>
-            <RootNavigator />
-            <StatusBar style="dark" />
-          </OrdersProvider>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <OrdersProvider>
+              <RootNavigator />
+              <StatusBar style="dark" />
+            </OrdersProvider>
+          </CartProvider>
+        </AuthProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

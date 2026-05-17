@@ -1,3 +1,4 @@
+import { Image } from 'expo-image';
 import React, { useMemo } from 'react';
 import { Text, View } from 'react-native';
 
@@ -26,8 +27,18 @@ function getInitials(name: string): string {
     .toUpperCase();
 }
 
-export const Avatar = ({ name, size = 'md', className }: AvatarProps) => {
+export const Avatar = ({ name, imageUrl, size = 'md', className }: AvatarProps) => {
   const initials = useMemo(() => getInitials(name), [name]);
+
+  if (imageUrl) {
+    return (
+      <Image
+        source={{ uri: imageUrl }}
+        className={cn('rounded-full bg-mist', sizeStyles[size], className)}
+        contentFit="cover"
+      />
+    );
+  }
 
   return (
     <View

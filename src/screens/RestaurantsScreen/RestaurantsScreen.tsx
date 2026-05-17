@@ -1,14 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 
 import { useDebounce } from '@/hooks/useDebounce';
 import { useRestaurantSearch } from '@/hooks/useSearch';
+import { useRestaurants } from '@/hooks/useRestaurants';
 import type { BottomTabScreenPropsFor } from '@/types/navigation.types';
 
-import { SearchScreenView } from './SearchScreenView';
+import { RestaurantsScreenView } from './RestaurantsScreenView';
 
-export const SearchScreen = () => {
+export const RestaurantsScreen = () => {
   const navigation = useNavigation<BottomTabScreenPropsFor<'Restaurants'>['navigation']>();
   const parentNavigation = navigation.getParent();
   const inputRef = useRef<TextInput>(null);
@@ -16,12 +17,9 @@ export const SearchScreen = () => {
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const debouncedQuery = useDebounce(query, 300);
-  const results = useRestaurantSearch(debouncedQuery, categoryId);
 
-  useEffect(() => {
-    const timer = setTimeout(() => inputRef.current?.focus(), 100);
-    return () => clearTimeout(timer);
-  }, []);
+  const { categories, isLoading, isRefreshing, refetch } = useRestaurants();
+  const restaurants = useRestaurantSearch(debouncedQuery, categoryId);
 
   const saveRecent = useCallback((term: string) => {
     const trimmed = term.trim();
@@ -52,21 +50,29 @@ export const SearchScreen = () => {
     [parentNavigation]
   );
 
+  const handleCategoryPress = useCallback((id: string | null) => {
+    setCategoryId(id);
+  }, []);
+
   return (
-    <SearchScreenView
+    <RestaurantsScreenView
       query={query}
       categoryId={categoryId}
-      results={results}
+      restaurants={restaurants}
+      categories={categories}
+      isLoading={isLoading}
+      isRefreshing={isRefreshing}
       recentSearches={recentSearches}
       inputRef={inputRef}
       onQueryChange={setQuery}
-      onCategoryPress={setCategoryId}
+      onCategoryPress={handleCategoryPress}
       onPopularPress={handlePopularPress}
       onRecentPress={handleRecentPress}
       onRestaurantPress={handleRestaurantPress}
+      onRefresh={refetch}
       onSubmit={handleSubmit}
     />
   );
 };
 
-export default SearchScreen;
+export default RestaurantsScreen;

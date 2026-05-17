@@ -27,8 +27,8 @@ export const OrdersScreenView = ({
   const data = tab === 'active' ? activeOrders : pastOrders;
 
   return (
-    <Screen className="bg-surface-alt">
-      <View className="border-b border-border bg-surface px-4 py-4">
+    <Screen className="bg-mist" edges={['top']}>
+      <View className="border-b border-border bg-surface px-4 pb-4 pt-2">
         <Typography variant="h2">Orders</Typography>
       </View>
 
@@ -63,20 +63,22 @@ export const OrdersScreenView = ({
           </Typography>
         }
         renderItem={({ item }) => (
-          <View className="mb-3 rounded-xl border border-border bg-surface p-4">
-            <View className="mb-1 flex-row items-center justify-between">
-              <Typography variant="h3" className="text-base">
+          <View className="mb-3 overflow-hidden rounded-2xl border border-border bg-surface p-4">
+            <View className="mb-1 flex-row items-start justify-between gap-2">
+              <Typography variant="h3" className="flex-1 text-sm leading-snug" numberOfLines={1}>
                 {item.restaurantName}
               </Typography>
-              <Typography variant="body" className="font-sans-bd">
+              <Typography variant="caption" className="font-sans-bd text-ink">
                 {formatCurrency(item.total)}
               </Typography>
             </View>
-            <Typography variant="caption" className="mb-3 text-ink-muted">
+            <Typography variant="caption" className="mb-3 text-[11px] text-ink-muted">
               {new Date(item.placedAt).toLocaleString('en-PK')} · {item.items.length} items
             </Typography>
             {tab === 'active' ? (
-              <OrderProgressTracker status={item.status} />
+              <View className="border-t border-border pt-3">
+                <OrderProgressTracker status={item.status} />
+              </View>
             ) : (
               <Button variant="outline" size="sm" onPress={() => onReorder(item.id)}>
                 Reorder

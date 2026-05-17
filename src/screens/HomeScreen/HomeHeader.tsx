@@ -22,7 +22,7 @@ export const HomeHeader = ({
   isScrolled = false,
 }: HomeHeaderProps) => (
   <View
-    className={cn('bg-surface rounded-b-3xl px-4 pb-4 pt-3 border border-border')}
+    className={cn('bg-surface px-4 pb-4 pt-3 border border-border')}
     style={{
       zIndex: 10,
     }}>

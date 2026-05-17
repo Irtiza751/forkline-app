@@ -2,17 +2,14 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useMemo } from 'react';
 import { Alert } from 'react-native';
 
+import { useAuth } from '@/hooks/useAuth';
 import type { BottomTabScreenPropsFor } from '@/types/navigation.types';
 
 import { ProfileScreenView, type ProfileSettingRow } from './ProfileScreenView';
 
-const MOCK_USER = {
-  name: 'Irtiza Khan',
-  email: 'irtiza@forkline.app',
-};
-
 export const ProfileScreen = () => {
   const navigation = useNavigation<BottomTabScreenPropsFor<'Profile'>['navigation']>();
+  const { user, signOut } = useAuth();
 
   const settings: ProfileSettingRow[] = useMemo(
     () => [
@@ -51,13 +48,27 @@ export const ProfileScreen = () => {
   );
 
   const handleLogout = useCallback(() => {
-    Alert.alert('Logged out', 'You have been logged out (mock).');
-  }, []);
+    Alert.alert('Log out', 'Are you sure you want to sign out?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Log out',
+        style: 'destructive',
+        onPress: () => {
+          void signOut();
+        },
+      },
+    ]);
+  }, [signOut]);
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <ProfileScreenView
-      name={MOCK_USER.name}
-      email={MOCK_USER.email}
+      name={user.name}
+      email={user.email}
+      photoUrl={user.photoUrl}
       settings={settings}
       onLogout={handleLogout}
     />

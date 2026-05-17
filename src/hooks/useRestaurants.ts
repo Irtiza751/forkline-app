@@ -1,57 +1,29 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { CATEGORIES, RESTAURANTS } from '@/data/mockData';
-import type { Category, Restaurant } from '@/types/restaurant.types';
+import { CATEGORIES } from '@/data/mockData';
+import type { Category } from '@/types/restaurant.types';
 
 export const useRestaurants = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setRestaurants(RESTAURANTS);
-      setIsLoading(false);
-    }, 1200);
+    const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
-  const categories: Category[] = useMemo(
-    () => [{ id: 'all', label: 'All' }, ...CATEGORIES],
-    []
-  );
-
-  const filteredRestaurants = useMemo(() => {
-    if (activeCategory === 'all') {
-      return restaurants;
-    }
-    return restaurants.filter(
-      (r) =>
-        r.tags.includes(activeCategory) ||
-        r.cuisine.toLowerCase().includes(activeCategory)
-    );
-  }, [activeCategory, restaurants]);
-
-  const featuredRestaurants = useMemo(
-    () => restaurants.filter((r) => r.isFeatured),
-    [restaurants]
-  );
+  const categories: Category[] = useMemo(() => CATEGORIES, []);
 
   const refetch = useCallback(() => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setRestaurants(RESTAURANTS);
-      setIsLoading(false);
-    }, 1500);
+    setIsRefreshing(true);
+    const timer = setTimeout(() => setIsRefreshing(false), 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   return {
-    restaurants: filteredRestaurants,
-    featuredRestaurants,
-    isLoading,
     categories,
-    activeCategory,
-    setActiveCategory,
+    isLoading,
+    isRefreshing,
     refetch,
   };
 };

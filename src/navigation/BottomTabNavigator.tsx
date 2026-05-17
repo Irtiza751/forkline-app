@@ -11,7 +11,7 @@ import { CartScreen } from '@/screens/CartScreen';
 import { HomeScreen } from '@/screens/HomeScreen';
 import { OrdersScreen } from '@/screens/OrdersScreen';
 import { ProfileScreen } from '@/screens/ProfileScreen';
-import { SearchScreen } from '@/screens/SearchScreen';
+import { RestaurantsScreen } from '@/screens/RestaurantsScreen';
 import type { BottomTabParamList } from '@/types/navigation.types';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
@@ -20,7 +20,7 @@ const VISIBLE_TABS: (keyof BottomTabParamList)[] = ['Home', 'Restaurants', 'Cart
 
 const TAB_ICONS: Record<keyof BottomTabParamList, keyof typeof Feather.glyphMap> = {
   Home: 'home',
-  Restaurants: 'search',
+  Restaurants: 'grid',
   Cart: 'shopping-bag',
   Orders: 'package',
   Profile: 'user',
@@ -99,7 +99,7 @@ export function BottomTabNavigator() {
       tabBar={(props) => <CustomTabBar {...props} />}
       screenOptions={{ headerShown: false }}>
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Restaurants" component={SearchScreen} />
+      <Tab.Screen name="Restaurants" component={RestaurantsScreen} />
       <Tab.Screen name="Cart" component={CartScreen} />
       <Tab.Screen
         name="Orders"
