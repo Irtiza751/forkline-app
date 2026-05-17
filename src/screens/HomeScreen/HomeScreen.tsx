@@ -27,6 +27,16 @@ export const HomeScreen = () => {
     [parentNavigation]
   );
 
+  const handleFoodItemPress = useCallback(
+    (item: { restaurantId: string; menuItem: { id: string } }) => {
+      parentNavigation?.navigate('FoodItem', {
+        restaurantId: item.restaurantId,
+        menuItemId: item.menuItem.id,
+      });
+    },
+    [parentNavigation]
+  );
+
   const handleCategoryPress = useCallback(
     (id: string) => {
       setActiveCategory(id);
@@ -47,7 +57,7 @@ export const HomeScreen = () => {
       activeCategory={activeCategory}
       onRefresh={refetch}
       onRestaurantPress={handleRestaurantPress}
-      onFoodItemPress={handleRestaurantPress}
+      onFoodItemPress={handleFoodItemPress}
       onCategoryPress={handleCategoryPress}
       onSearchPress={handleSearchPress}
     />

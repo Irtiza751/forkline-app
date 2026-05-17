@@ -11,13 +11,22 @@ import type { MenuItem } from '@/types/restaurant.types';
 export interface MenuItemCardProps {
   item: MenuItem;
   quantity: number;
+  onPress: () => void;
   onAdd: () => void;
   onIncrement: () => void;
   onDecrement: () => void;
 }
 
-const MenuItemCardRoot = ({ item, quantity, onAdd, onIncrement, onDecrement }: MenuItemCardProps) => (
+const MenuItemCardRoot = ({
+  item,
+  quantity,
+  onPress,
+  onAdd,
+  onIncrement,
+  onDecrement,
+}: MenuItemCardProps) => (
   <View className="mb-1 flex-row gap-3 border-b border-border py-4">
+    <Pressable onPress={onPress} className="flex-1 active:opacity-80">
     <MenuItemCard.Body>
       <View className="flex-row items-start gap-2 pr-24">
         {item.isVeg && <View className="mt-1.5 h-2 w-2 rounded-full bg-brand" />}
@@ -28,6 +37,7 @@ const MenuItemCardRoot = ({ item, quantity, onAdd, onIncrement, onDecrement }: M
         </View>
       </View>
     </MenuItemCard.Body>
+    </Pressable>
     <View className="items-end">
       <MenuItemCard.Image source={item.imageUrl} />
       <MenuItemCard.Actions

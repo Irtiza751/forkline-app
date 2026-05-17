@@ -15,10 +15,15 @@ export const useCart = () => {
       }
       setRestaurantId(item.restaurantId);
       setItems((prev) => {
-        const existing = prev.find((i) => i.menuItemId === item.menuItemId);
+        const existing = prev.find(
+          (i) =>
+            i.menuItemId === item.menuItemId &&
+            i.specialNotes === item.specialNotes &&
+            JSON.stringify(i.selectedExtras) === JSON.stringify(item.selectedExtras)
+        );
         if (existing) {
           return prev.map((i) =>
-            i.menuItemId === item.menuItemId ? { ...i, quantity: i.quantity + item.quantity } : i
+            i.id === existing.id ? { ...i, quantity: i.quantity + item.quantity } : i
           );
         }
         return [...prev, item];
@@ -28,9 +33,9 @@ export const useCart = () => {
   );
 
   const removeItem = useCallback(
-    (menuItemId: string) => {
+    (cartLineId: string) => {
       setItems((prev) => {
-        const next = prev.filter((i) => i.menuItemId !== menuItemId);
+        const next = prev.filter((i) => i.id !== cartLineId);
         if (next.length === 0) {
           setRestaurantId(null);
         }
@@ -41,16 +46,20 @@ export const useCart = () => {
   );
 
   const updateQty = useCallback(
-    (menuItemId: string, qty: number) => {
+    (cartLineId: string, qty: number) => {
       if (qty <= 0) {
-        removeItem(menuItemId);
+        removeItem(cartLineId);
         return;
       }
-      setItems((prev) =>
-        prev.map((i) => (i.menuItemId === menuItemId ? { ...i, quantity: qty } : i))
-      );
+      setItems((prev) => prev.map((i) => (i.id === cartLineId ? { ...i, quantity: qty } : i)));
     },
     [removeItem, setItems]
+  );
+
+  const getQuantityForMenuItem = useCallback(
+    (menuItemId: string) =>
+      items.filter((i) => i.menuItemId === menuItemId).reduce((sum, i) => sum + i.quantity, 0),
+    [items]
   );
 
   const clearCart = useCallback(() => {
@@ -83,6 +92,7 @@ export const useCart = () => {
     addItem,
     removeItem,
     updateQty,
+    getQuantityForMenuItem,
     clearCart,
     total,
     itemCount,

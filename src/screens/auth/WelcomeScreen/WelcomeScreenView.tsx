@@ -2,6 +2,8 @@ import React from 'react';
 import { Pressable, View } from 'react-native';
 
 import Logo from '@/components/brand/Logo';
+import { AuthDivider } from '@/components/auth/AuthDivider';
+import { EmailSignInForm } from '@/components/auth/EmailSignInForm';
 import { GoogleSignInButton } from '@/components/auth/GoogleSignInButton';
 import { Screen } from '@/components/layout/Screen';
 import { Typography } from '@/components/ui/Typography';
@@ -9,6 +11,7 @@ import { Typography } from '@/components/ui/Typography';
 export interface WelcomeScreenViewProps {
   isSigningIn: boolean;
   onGooglePress: () => void;
+  onEmailSubmit: (email: string) => void;
   onLoginPress: () => void;
   onRegisterPress: () => void;
 }
@@ -16,10 +19,11 @@ export interface WelcomeScreenViewProps {
 export const WelcomeScreenView = ({
   isSigningIn,
   onGooglePress,
+  onEmailSubmit,
   onLoginPress,
   onRegisterPress,
 }: WelcomeScreenViewProps) => (
-  <Screen className="bg-mist" contentClassName="flex-1 justify-between px-6 pb-10 pt-16">
+  <Screen className="bg-mist" scrollable contentClassName="px-6 pb-10 pt-16">
     <View className="items-center">
       <Logo width={160} />
       <Typography variant="h1" className="mt-8 text-center">
@@ -30,8 +34,10 @@ export const WelcomeScreenView = ({
       </Typography>
     </View>
 
-    <View className="gap-4">
+    <View className="mt-10 gap-4">
       <GoogleSignInButton loading={isSigningIn} onPress={onGooglePress} />
+      <AuthDivider />
+      <EmailSignInForm loading={isSigningIn} onSubmit={onEmailSubmit} />
       <View className="flex-row items-center justify-center gap-1">
         <Typography variant="caption" className="text-ink-muted">
           Already have an account?

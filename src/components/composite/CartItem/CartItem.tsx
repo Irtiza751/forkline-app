@@ -27,7 +27,7 @@ export const CartItem = React.memo(({ item, onIncrement, onDecrement, onRemove }
 
   return (
     <Swipeable renderRightActions={renderRightActions} overshootRight={false}>
-      <View className="mb-3 flex-row items-center gap-3 rounded-xl border border-border bg-surface p-3">
+      <View className="mb-3 flex-row items-start gap-3 rounded-xl border border-border bg-surface p-3">
         <Image source={{ uri: item.imageUrl }} style={{ width: 64, height: 64, borderRadius: 10 }} />
         <View className="flex-1">
           <Typography variant="h3" className="text-base leading-snug">
@@ -36,6 +36,16 @@ export const CartItem = React.memo(({ item, onIncrement, onDecrement, onRemove }
           <Typography variant="caption" className="text-ink-muted">
             {item.restaurantName}
           </Typography>
+          {item.selectedExtras.length > 0 && (
+            <Typography variant="caption" className="mt-1 text-[11px] leading-4 text-ink-muted">
+              {item.selectedExtras.map((e) => e.label).join(' · ')}
+            </Typography>
+          )}
+          {item.specialNotes ? (
+            <Typography variant="caption" className="mt-1 text-[11px] italic text-ink-muted">
+              Note: {item.specialNotes}
+            </Typography>
+          ) : null}
           <Typography variant="body" className="mt-1 font-sans-bd">
             {formatCurrency(item.price * item.quantity)}
           </Typography>

@@ -15,60 +15,49 @@ export const RestaurantScreen = () => {
   const navigation = useNavigation<RootStackScreenProps<'Restaurant'>['navigation']>();
   const restaurant = getRestaurantById(route.params.restaurantId);
   const [activeCategoryId, setActiveCategoryId] = useState(restaurant?.menu[0]?.id ?? '');
-  const { items, addItem, updateQty, itemCount, total } = useCart();
+  const { items, updateQty, getQuantityForMenuItem, itemCount, total } = useCart();
 
   const getItemQuantity = useCallback(
-    (menuItemId: string) => items.find((i) => i.menuItemId === menuItemId)?.quantity ?? 0,
-    [items]
+    (menuItemId: string) => getQuantityForMenuItem(menuItemId),
+    [getQuantityForMenuItem]
   );
 
-  const findMenuItem = useCallback(
+  const openFoodItem = useCallback(
     (menuItemId: string) => {
-      if (!restaurant) return null;
-      for (const category of restaurant.menu) {
-        const found = category.items.find((i) => i.id === menuItemId);
-        if (found) return found;
-      }
-      return null;
-    },
-    [restaurant]
-  );
-
-  const handleAddItem = useCallback(
-    (menuItemId: string) => {
-      const menuItem = findMenuItem(menuItemId);
-      if (!menuItem || !restaurant) return;
-      addItem({
-        menuItemId: menuItem.id,
+      if (!restaurant) return;
+      navigation.navigate('FoodItem', {
         restaurantId: restaurant.id,
-        restaurantName: restaurant.name,
-        name: menuItem.name,
-        price: menuItem.price,
-        quantity: 1,
-        imageUrl: menuItem.imageUrl,
+        menuItemId,
       });
     },
-    [addItem, findMenuItem, restaurant]
+    [navigation, restaurant]
+  );
+
+  const findFirstCartLine = useCallback(
+    (menuItemId: string) => items.find((i) => i.menuItemId === menuItemId),
+    [items]
   );
 
   const handleIncrement = useCallback(
     (menuItemId: string) => {
-      const qty = getItemQuantity(menuItemId);
-      if (qty === 0) {
-        handleAddItem(menuItemId);
+      const line = findFirstCartLine(menuItemId);
+      if (line) {
+        updateQty(line.id, line.quantity + 1);
         return;
       }
-      updateQty(menuItemId, qty + 1);
+      openFoodItem(menuItemId);
     },
-    [getItemQuantity, handleAddItem, updateQty]
+    [findFirstCartLine, openFoodItem, updateQty]
   );
 
   const handleDecrement = useCallback(
     (menuItemId: string) => {
-      const qty = getItemQuantity(menuItemId);
-      updateQty(menuItemId, qty - 1);
+      const line = findFirstCartLine(menuItemId);
+      if (line) {
+        updateQty(line.id, line.quantity - 1);
+      }
     },
-    [getItemQuantity, updateQty]
+    [findFirstCartLine, updateQty]
   );
 
   const handleViewCart = useCallback(() => {
@@ -95,7 +84,8 @@ export const RestaurantScreen = () => {
       getItemQuantity={getItemQuantity}
       onBack={() => navigation.goBack()}
       onCategoryPress={setActiveCategoryId}
-      onAddItem={handleAddItem}
+      onItemPress={openFoodItem}
+      onAddItem={openFoodItem}
       onIncrement={handleIncrement}
       onDecrement={handleDecrement}
       onViewCart={handleViewCart}

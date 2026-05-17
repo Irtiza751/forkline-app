@@ -29,6 +29,7 @@ export interface RestaurantScreenViewProps {
   getItemQuantity: (menuItemId: string) => number;
   onBack: () => void;
   onCategoryPress: (categoryId: string) => void;
+  onItemPress: (menuItemId: string) => void;
   onAddItem: (menuItemId: string) => void;
   onIncrement: (menuItemId: string) => void;
   onDecrement: (menuItemId: string) => void;
@@ -43,6 +44,7 @@ export const RestaurantScreenView = ({
   getItemQuantity,
   onBack,
   onCategoryPress,
+  onItemPress,
   onAddItem,
   onIncrement,
   onDecrement,
@@ -164,6 +166,7 @@ export const RestaurantScreenView = ({
                   key={item.id}
                   item={item}
                   quantity={getItemQuantity(item.id)}
+                  onPress={() => onItemPress(item.id)}
                   onAdd={() => onAddItem(item.id)}
                   onIncrement={() => onIncrement(item.id)}
                   onDecrement={() => onDecrement(item.id)}

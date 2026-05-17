@@ -11,12 +11,12 @@ import type { FeedFoodItem } from '@/types/restaurant.types';
 
 export interface FoodItemCardProps {
   item: FeedFoodItem;
-  onPress: (restaurantId: string) => void;
+  onPress: (item: FeedFoodItem) => void;
 }
 
 export const FoodItemCard = React.memo(({ item, onPress }: FoodItemCardProps) => (
   <Pressable
-    onPress={() => onPress(item.restaurantId)}
+    onPress={() => onPress(item)}
     className="mx-4 mb-4 overflow-hidden rounded-2xl border border-border bg-surface active:opacity-90">
     <Image
       source={{ uri: item.menuItem.imageUrl }}

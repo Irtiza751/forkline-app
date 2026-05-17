@@ -29,7 +29,7 @@ export interface HomeScreenViewProps {
   activeCategory: string;
   onRefresh: () => void;
   onRestaurantPress: (id: string) => void;
-  onFoodItemPress: (restaurantId: string) => void;
+  onFoodItemPress: (item: FeedFoodItem) => void;
   onCategoryPress: (id: string) => void;
   onSearchPress: () => void;
 }

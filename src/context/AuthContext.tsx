@@ -15,6 +15,7 @@ interface AuthContextValue {
   isLoading: boolean;
   isSigningIn: boolean;
   signInWithGoogle: () => Promise<void>;
+  signInWithEmail: (email: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -50,6 +51,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  const signInWithEmail = useCallback(async (email: string) => {
+    const trimmed = email.trim().toLowerCase();
+    setIsSigningIn(true);
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 350));
+      const emailUser: User = {
+        id: `email-${trimmed}`,
+        email: trimmed,
+        name: trimmed.split('@')[0].replace(/[._]/g, ' ') || 'ForkLine User',
+      };
+      await saveStoredUser(emailUser);
+      setUser(emailUser);
+    } finally {
+      setIsSigningIn(false);
+    }
+  }, []);
+
   const signOut = useCallback(async () => {
     await clearStoredUser();
     setUser(null);
@@ -61,9 +79,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       isLoading,
       isSigningIn,
       signInWithGoogle,
+      signInWithEmail,
       signOut,
     }),
-    [user, isLoading, isSigningIn, signInWithGoogle, signOut]
+    [user, isLoading, isSigningIn, signInWithGoogle, signInWithEmail, signOut]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

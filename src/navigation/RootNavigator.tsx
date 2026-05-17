@@ -4,6 +4,7 @@ import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 
 import { useAuth } from '@/hooks/useAuth';
+import { FoodItemScreen } from '@/screens/FoodItemScreen';
 import { RestaurantScreen } from '@/screens/RestaurantScreen';
 import { colors } from '@/constants/colors';
 import type { RootStackParamList } from '@/types/navigation.types';
@@ -46,6 +47,11 @@ export function RootNavigator() {
               name="Restaurant"
               component={RestaurantScreen}
               options={{ animation: 'slide_from_right' }}
+            />
+            <Stack.Screen
+              name="FoodItem"
+              component={FoodItemScreen}
+              options={{ animation: 'slide_from_bottom' }}
             />
           </>
         ) : (

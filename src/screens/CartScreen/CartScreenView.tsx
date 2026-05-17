@@ -16,9 +16,9 @@ export interface CartScreenViewProps {
   gst: number;
   grandTotal: number;
   placing: boolean;
-  onIncrement: (menuItemId: string) => void;
-  onDecrement: (menuItemId: string) => void;
-  onRemove: (menuItemId: string) => void;
+  onIncrement: (cartLineId: string) => void;
+  onDecrement: (cartLineId: string) => void;
+  onRemove: (cartLineId: string) => void;
   onPlaceOrder: () => void;
 }
 
@@ -52,11 +52,11 @@ export const CartScreenView = ({
         <ScrollView className="flex-1 px-4 pt-3" showsVerticalScrollIndicator={false}>
           {items.map((item) => (
             <CartItem
-              key={item.menuItemId}
+              key={item.id}
               item={item}
-              onIncrement={() => onIncrement(item.menuItemId)}
-              onDecrement={() => onDecrement(item.menuItemId)}
-              onRemove={() => onRemove(item.menuItemId)}
+              onIncrement={() => onIncrement(item.id)}
+              onDecrement={() => onDecrement(item.id)}
+              onRemove={() => onRemove(item.id)}
             />
           ))}
           <View className="mt-2 rounded-xl border border-border bg-surface p-4">

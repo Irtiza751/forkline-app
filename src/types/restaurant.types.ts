@@ -1,3 +1,5 @@
+import type { CartItemExtra } from './menuCustomization.types';
+
 export interface MenuItem {
   id: string;
   name: string;
@@ -41,13 +43,17 @@ export interface FeedFoodItem {
 }
 
 export interface CartItem {
+  id: string;
   menuItemId: string;
   restaurantId: string;
   restaurantName: string;
   name: string;
+  basePrice: number;
   price: number;
   quantity: number;
   imageUrl: string;
+  selectedExtras: CartItemExtra[];
+  specialNotes?: string;
 }
 
 export type OrderStatus =

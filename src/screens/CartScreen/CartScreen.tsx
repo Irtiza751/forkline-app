@@ -63,13 +63,13 @@ export const CartScreen = () => {
         gst={gst}
         grandTotal={grandTotal}
         placing={placing}
-        onIncrement={(id) => {
-          const item = items.find((i) => i.menuItemId === id);
-          if (item) updateQty(id, item.quantity + 1);
+        onIncrement={(cartLineId) => {
+          const item = items.find((i) => i.id === cartLineId);
+          if (item) updateQty(cartLineId, item.quantity + 1);
         }}
-        onDecrement={(id) => {
-          const item = items.find((i) => i.menuItemId === id);
-          if (item) updateQty(id, item.quantity - 1);
+        onDecrement={(cartLineId) => {
+          const item = items.find((i) => i.id === cartLineId);
+          if (item) updateQty(cartLineId, item.quantity - 1);
         }}
         onRemove={removeItem}
         onPlaceOrder={handlePlaceOrder}

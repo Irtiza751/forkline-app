@@ -12,6 +12,7 @@ export type RootStackParamList = {
   Auth: undefined;
   BottomTabs: NavigatorScreenParams<BottomTabParamList> | undefined;
   Restaurant: { restaurantId: string };
+  FoodItem: { restaurantId: string; menuItemId: string };
 };
 
 export type BottomTabParamList = {

@@ -621,3 +621,16 @@ export const RESTAURANTS: Restaurant[] = [
 export function getRestaurantById(id: string): Restaurant | undefined {
   return RESTAURANTS.find((r) => r.id === id);
 }
+
+export function getMenuItemById(
+  restaurantId: string,
+  menuItemId: string
+): { restaurant: Restaurant; menuItem: MenuItem } | undefined {
+  const restaurant = getRestaurantById(restaurantId);
+  if (!restaurant) return undefined;
+  for (const category of restaurant.menu) {
+    const menuItem = category.items.find((i) => i.id === menuItemId);
+    if (menuItem) return { restaurant, menuItem };
+  }
+  return undefined;
+}

@@ -9,20 +9,32 @@ import { WelcomeScreenView } from './WelcomeScreenView';
 
 export const WelcomeScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList, 'Welcome'>>();
-  const { signInWithGoogle, isSigningIn } = useAuth();
+  const { signInWithGoogle, signInWithEmail, isSigningIn } = useAuth();
 
   const handleGooglePress = useCallback(async () => {
     try {
       await signInWithGoogle();
     } catch {
-      // User cancelled or provider error — no alert for cancel
+      // cancelled
     }
   }, [signInWithGoogle]);
+
+  const handleEmailSubmit = useCallback(
+    async (email: string) => {
+      try {
+        await signInWithEmail(email);
+      } catch {
+        // noop
+      }
+    },
+    [signInWithEmail]
+  );
 
   return (
     <WelcomeScreenView
       isSigningIn={isSigningIn}
       onGooglePress={handleGooglePress}
+      onEmailSubmit={handleEmailSubmit}
       onLoginPress={() => navigation.navigate('Login')}
       onRegisterPress={() => navigation.navigate('Register')}
     />

@@ -9,7 +9,7 @@ import { LoginScreenView } from './LoginScreenView';
 
 export const LoginScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<AuthStackParamList, 'Login'>>();
-  const { signInWithGoogle, isSigningIn } = useAuth();
+  const { signInWithGoogle, signInWithEmail, isSigningIn } = useAuth();
 
   const handleGooglePress = useCallback(async () => {
     try {
@@ -19,11 +19,23 @@ export const LoginScreen = () => {
     }
   }, [signInWithGoogle]);
 
+  const handleEmailSubmit = useCallback(
+    async (email: string) => {
+      try {
+        await signInWithEmail(email);
+      } catch {
+        // noop
+      }
+    },
+    [signInWithEmail]
+  );
+
   return (
     <LoginScreenView
       isSigningIn={isSigningIn}
       onBackPress={() => navigation.goBack()}
       onGooglePress={handleGooglePress}
+      onEmailSubmit={handleEmailSubmit}
       onRegisterPress={() => navigation.navigate('Register')}
     />
   );
