@@ -31,6 +31,15 @@ export interface Restaurant {
   menu: MenuCategory[];
 }
 
+export interface FeedFoodItem {
+  id: string;
+  menuItem: MenuItem;
+  restaurantId: string;
+  restaurantName: string;
+  restaurantRating: number;
+  deliveryTime: number;
+}
+
 export interface CartItem {
   menuItemId: string;
   restaurantId: string;

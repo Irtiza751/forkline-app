@@ -3,20 +3,20 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { TextInput } from 'react-native';
 
 import { useDebounce } from '@/hooks/useDebounce';
-import { useSearch } from '@/hooks/useSearch';
+import { useRestaurantSearch } from '@/hooks/useSearch';
 import type { BottomTabScreenPropsFor } from '@/types/navigation.types';
 
 import { SearchScreenView } from './SearchScreenView';
 
 export const SearchScreen = () => {
-  const navigation = useNavigation<BottomTabScreenPropsFor<'Search'>['navigation']>();
+  const navigation = useNavigation<BottomTabScreenPropsFor<'Restaurants'>['navigation']>();
   const parentNavigation = navigation.getParent();
   const inputRef = useRef<TextInput>(null);
   const [query, setQuery] = useState('');
   const [categoryId, setCategoryId] = useState<string | null>(null);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const debouncedQuery = useDebounce(query, 300);
-  const results = useSearch(debouncedQuery, categoryId);
+  const results = useRestaurantSearch(debouncedQuery, categoryId);
 
   useEffect(() => {
     const timer = setTimeout(() => inputRef.current?.focus(), 100);

@@ -27,7 +27,7 @@ export const SearchBar = ({ onPress, className }: SearchBarProps) => (
     }}>
     <Ionicons name="search" size={20} color={colors.muted} />
     <Typography variant="body" className="text-muted-light">
-      Search restaurants, cuisines...
+      Search restaurants...
     </Typography>
   </Pressable>
 );

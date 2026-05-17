@@ -1,5 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
 import React, { useCallback, useMemo } from 'react';
 import { Alert } from 'react-native';
+
+import type { BottomTabScreenPropsFor } from '@/types/navigation.types';
 
 import { ProfileScreenView, type ProfileSettingRow } from './ProfileScreenView';
 
@@ -9,8 +12,15 @@ const MOCK_USER = {
 };
 
 export const ProfileScreen = () => {
+  const navigation = useNavigation<BottomTabScreenPropsFor<'Profile'>['navigation']>();
+
   const settings: ProfileSettingRow[] = useMemo(
     () => [
+      {
+        icon: 'receipt-outline',
+        label: 'My orders',
+        onPress: () => navigation.navigate('Orders'),
+      },
       {
         icon: 'person-outline',
         label: 'Edit profile',
@@ -37,7 +47,7 @@ export const ProfileScreen = () => {
         onPress: () => Alert.alert('Support', 'support@forkline.app'),
       },
     ],
-    []
+    [navigation]
   );
 
   const handleLogout = useCallback(() => {

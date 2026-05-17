@@ -9,38 +9,40 @@ import {
 } from 'react-native';
 
 import { FeaturedRestaurantCard } from '@/components/composite/FeaturedRestaurantCard';
-import { RestaurantCard, RestaurantCardSkeleton } from '@/components/composite/RestaurantCard';
+import { FoodItemCard, FoodItemCardSkeleton } from '@/components/composite/FoodItemCard';
 import { Screen } from '@/components/layout/Screen';
 import { Section } from '@/components/layout/Section';
 import { Typography } from '@/components/ui/Typography';
 import { colors } from '@/constants/colors';
 import { cn } from '@/lib/cn';
-import type { Category, Restaurant } from '@/types/restaurant.types';
+import type { Category, FeedFoodItem, Restaurant } from '@/types/restaurant.types';
 
 import { HomeHeader } from './HomeHeader';
 
 const SCROLL_THRESHOLD = 8;
 
 export interface HomeScreenViewProps {
-  restaurants: Restaurant[];
+  foodItems: FeedFoodItem[];
   featuredRestaurants: Restaurant[];
   isLoading: boolean;
   categories: Category[];
   activeCategory: string;
   onRefresh: () => void;
   onRestaurantPress: (id: string) => void;
+  onFoodItemPress: (restaurantId: string) => void;
   onCategoryPress: (id: string) => void;
   onSearchPress: () => void;
 }
 
 export const HomeScreenView = ({
-  restaurants,
+  foodItems,
   featuredRestaurants,
   isLoading,
   categories,
   activeCategory,
   onRefresh,
   onRestaurantPress,
+  onFoodItemPress,
   onCategoryPress,
   onSearchPress,
 }: HomeScreenViewProps) => {
@@ -87,38 +89,36 @@ export const HomeScreenView = ({
           })}
         </ScrollView>
 
-        <Section title="Featured" className="mt-2">
-          <FlatList
-            horizontal
-            data={featuredRestaurants}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <FeaturedRestaurantCard restaurant={item} onPress={onRestaurantPress} />
-            )}
-            showsHorizontalScrollIndicator={false}
-            contentContainerClassName="px-4"
-          />
-        </Section>
+        {featuredRestaurants.length > 0 && (
+          <Section title="Featured restaurants" className="mt-2">
+            <FlatList
+              horizontal
+              data={featuredRestaurants}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <FeaturedRestaurantCard restaurant={item} onPress={onRestaurantPress} />
+              )}
+              showsHorizontalScrollIndicator={false}
+              contentContainerClassName="px-4"
+            />
+          </Section>
+        )}
 
-        <Section title="All restaurants">
+        <Section title="Popular dishes">
           {isLoading ? (
             <>
-              <RestaurantCardSkeleton />
-              <RestaurantCardSkeleton />
-              <RestaurantCardSkeleton />
+              <FoodItemCardSkeleton />
+              <FoodItemCardSkeleton />
+              <FoodItemCardSkeleton />
             </>
           ) : (
             <>
-              {restaurants.map((restaurant) => (
-                <RestaurantCard
-                  key={restaurant.id}
-                  restaurant={restaurant}
-                  onPress={onRestaurantPress}
-                />
+              {foodItems.map((item) => (
+                <FoodItemCard key={item.id} item={item} onPress={onFoodItemPress} />
               ))}
-              {restaurants.length === 0 && (
-                <Typography variant="caption" className="px-4 py-8 text-center">
-                  No restaurants found in this category.
+              {foodItems.length === 0 && (
+                <Typography variant="caption" className="px-4 py-8 text-center text-ink-muted">
+                  No dishes found in this category.
                 </Typography>
               )}
             </>

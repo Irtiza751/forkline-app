@@ -41,14 +41,14 @@ export const SearchScreenView = ({
   <Screen className="bg-surface-alt">
     <View className="border-b border-border bg-surface px-4 pb-4 pt-2">
       <Typography variant="h2" className="mb-3">
-        Search
+        Restaurants
       </Typography>
       <Input
         ref={inputRef}
         value={query}
         onChangeText={onQueryChange}
         onSubmitEditing={onSubmit}
-        placeholder="Search restaurants, dishes..."
+        placeholder="Search restaurants by name or cuisine..."
         autoFocus
         returnKeyType="search"
         leftIcon={<Ionicons name="search" size={20} color={colors.muted} style={{ marginRight: 8 }} />}

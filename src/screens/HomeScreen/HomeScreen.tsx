@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useCallback } from 'react';
 
-import { useRestaurants } from '@/hooks/useRestaurants';
+import { useFoodFeed } from '@/hooks/useFoodFeed';
 import type { BottomTabScreenPropsFor } from '@/types/navigation.types';
 
 import { HomeScreenView } from './HomeScreenView';
@@ -11,14 +11,14 @@ export const HomeScreen = () => {
   const parentNavigation = navigation.getParent();
 
   const {
-    restaurants,
+    foodItems,
     featuredRestaurants,
     isLoading,
     categories,
     activeCategory,
     setActiveCategory,
     refetch,
-  } = useRestaurants();
+  } = useFoodFeed();
 
   const handleRestaurantPress = useCallback(
     (id: string) => {
@@ -35,18 +35,19 @@ export const HomeScreen = () => {
   );
 
   const handleSearchPress = useCallback(() => {
-    navigation.navigate('Search');
+    navigation.navigate('Restaurants');
   }, [navigation]);
 
   return (
     <HomeScreenView
       isLoading={isLoading}
-      restaurants={restaurants}
+      foodItems={foodItems}
       featuredRestaurants={featuredRestaurants}
       categories={categories}
       activeCategory={activeCategory}
       onRefresh={refetch}
       onRestaurantPress={handleRestaurantPress}
+      onFoodItemPress={handleRestaurantPress}
       onCategoryPress={handleCategoryPress}
       onSearchPress={handleSearchPress}
     />

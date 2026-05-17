@@ -17,24 +17,28 @@ export interface RestaurantCardProps {
 export const RestaurantCard = React.memo(({ restaurant, onPress }: RestaurantCardProps) => (
   <Pressable
     onPress={() => onPress(restaurant.id)}
-    className="mx-4 mb-3 flex-row overflow-hidden rounded-xl border border-border bg-surface active:opacity-90">
+    className="mx-4 mb-4 overflow-hidden rounded-2xl border border-border bg-surface active:opacity-90">
     <Image
       source={{ uri: restaurant.imageUrl }}
-      style={{ width: 96, height: 96 }}
+      style={{ width: '100%', height: 160 }}
       contentFit="cover"
     />
-    <View className="flex-1 justify-center px-3 py-2.5">
+    <View className="p-4">
       <Typography variant="h3" className="text-base leading-snug" numberOfLines={1}>
         {restaurant.name}
       </Typography>
-      <Typography variant="caption" className="mt-0.5 text-ink-muted" numberOfLines={1}>
+      <Typography variant="caption" className="mt-1 text-ink-muted" numberOfLines={1}>
         {restaurant.cuisine}
       </Typography>
-      <View className="mt-2 flex-row flex-wrap items-center gap-x-2 gap-y-1">
+      <View className="mt-3 flex-row flex-wrap items-center gap-x-2 gap-y-1">
         <View className="flex-row items-center gap-0.5">
           <Ionicons name="star" size={12} color={colors.star} />
           <Typography variant="caption" className="font-sans-md text-ink">
             {restaurant.rating}
+          </Typography>
+          <Typography variant="caption" className="text-muted-light">
+            {' '}
+            ({restaurant.reviewCount})
           </Typography>
         </View>
         <Typography variant="caption" className="text-muted-light">
@@ -44,12 +48,15 @@ export const RestaurantCard = React.memo(({ restaurant, onPress }: RestaurantCar
         <Typography variant="caption" className="text-muted-light">
           ·
         </Typography>
-        <Typography variant="caption">{formatCurrency(restaurant.deliveryFee)}</Typography>
+        <Typography variant="caption">{formatCurrency(restaurant.deliveryFee)} fee</Typography>
       </View>
-      <View className="mt-2 flex-row items-center justify-between">
+      <View className="mt-3 flex-row items-center justify-between">
         <Badge variant={restaurant.isOpen ? 'success' : 'muted'}>
           {restaurant.isOpen ? 'Open' : 'Closed'}
         </Badge>
+        <Typography variant="caption" className="text-ink-muted">
+          Min {formatCurrency(restaurant.minOrder)}
+        </Typography>
       </View>
     </View>
   </Pressable>
@@ -58,7 +65,13 @@ export const RestaurantCard = React.memo(({ restaurant, onPress }: RestaurantCar
 RestaurantCard.displayName = 'RestaurantCard';
 
 export const RestaurantCardSkeleton = () => (
-  <View className="mx-4 mb-3 h-24 rounded-xl bg-surface-alt" />
+  <View className="mx-4 mb-4 overflow-hidden rounded-2xl border border-border bg-surface">
+    <View className="h-40 w-full bg-mist" />
+    <View className="gap-2 p-4">
+      <View className="h-4 w-2/3 rounded bg-mist" />
+      <View className="h-3 w-1/2 rounded bg-mist" />
+    </View>
+  </View>
 );
 
 export default RestaurantCard;

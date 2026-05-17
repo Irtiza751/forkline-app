@@ -22,19 +22,10 @@ export const HomeHeader = ({
   isScrolled = false,
 }: HomeHeaderProps) => (
   <View
-    className={cn('bg-surface px-4 pb-4 pt-3', !isScrolled && 'border-b border-border')}
-    style={
-      isScrolled
-        ? {
-            zIndex: 10,
-            shadowColor: colors.ink,
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.1,
-            shadowRadius: 12,
-            elevation: 8,
-          }
-        : { zIndex: 10 }
-    }>
+    className={cn('bg-surface rounded-b-3xl px-4 pb-4 pt-3 border border-border')}
+    style={{
+      zIndex: 10,
+    }}>
     <View className="flex-row items-center justify-between gap-3 mb-2">
       <Logo width={120} />
       <Pressable
