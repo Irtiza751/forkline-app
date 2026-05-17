@@ -74,3 +74,4 @@ npm run typecheck
 - All prices use **PKR** formatting (`en-PK` locale).
 - Data is **mock-only**; no backend required for this MVP.
 - Payments, GPS tracking, reviews, and promos are out of scope.
+# forkline-app
